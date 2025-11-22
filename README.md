@@ -1,187 +1,159 @@
-This is a professional and detailed README, designed to attract recruiters and serve as excellent documentation for your friend and future collaborators.
-
  CyberGuard 360 — AI-Powered Attack Simulation & Defense Platform
+================================================================
 
-A hands-on, full-stack environment for learning web security by simulating real-world attacks and observing an intelligent defense engine in real-time.
+A full-stack, interactive cybersecurity lab that simulates real-world web attacks and demonstrates how an intelligent defense engine detects, analyzes, and blocks them in real time.
 
-Key Features
-Feature	Technology	Description
-Attack Simulator	React, Axios	Frontend forms to launch simulated SQL Injection, XSS, Ransomware, and Safe Requests against the vulnerable backend.
-AI Defense Engine	Node.js, Express Middleware	Rule-based engine that intercepts requests, detects malicious patterns, rates severity, logs the event, and conditionally blocks the attack.
-Live Traffic Monitor	Socket.IO (Full-Duplex)	Real-time dashboard visualizing all incoming requests as a stream of RED (attacks) vs. GREEN (safe requests).
-Detailed Attack Logging	MongoDB, Mongoose	Stores a complete record of every request, including payload, detection status, action taken, and suggested mitigation.
-Log Analysis & Filtering	Express API, MongoDB Query	Backend endpoints with filtering and pagination capabilities (by type, severity, date) to power the historical logs table.
-Modern UI	React, Tailwind CSS	Sleek, high-contrast dark-mode interface for a professional and impressive user experience.
-🛠️ Tech Stack
-Component	Technologies
-Frontend (Client)	React.js, Tailwind CSS, Axios, Socket.IO Client, lucide-react (Icons), React Router.
-Backend (Server)	Node.js, Express.js, MongoDB (Mongoose), Socket.IO.
-⚙️ Installation & Setup
-Prerequisites
+----------------------------------------------------------------
+KEY FEATURES
+----------------------------------------------------------------
 
-Node.js (v18+)
+1. Attack Simulator
+   - Technologies: React, Axios
+   - Description: Launch simulated SQL Injection, XSS, Ransomware, and safe requests to the backend.
 
-npm
+2. AI Defense Engine
+   - Technologies: Node.js, Express Middleware
+   - Description: Rule-based middleware that detects malicious patterns, assigns severity, logs the event, and blocks the attack.
 
-A running MongoDB instance (Local or MongoDB Atlas URI)
+3. Live Traffic Monitor
+   - Technologies: Socket.IO
+   - Description: Real-time visualization of every incoming request (attack or safe).
 
-Step 1: Clone the Repository
-code
-Bash
-download
-content_copy
-expand_less
-git clone [YOUR_REPO_URL]
+4. Detailed Attack Logging
+   - Technologies: MongoDB, Mongoose
+   - Description: Stores payloads, detection status, severity, timestamps, and mitigation suggestions.
+
+5. Log Analysis & Filtering
+   - Technologies: Express API, MongoDB Querying
+   - Description: Filter logs by attack type, severity, date, or detection status.
+
+6. Modern UI
+   - Technologies: React + Tailwind CSS
+   - Description: A clean, dark-mode, high-contrast user interface.
+
+----------------------------------------------------------------
+TECH STACK
+----------------------------------------------------------------
+
+Frontend:
+- React.js
+- Tailwind CSS
+- Axios
+- Socket.IO client
+- lucide-react icons
+- React Router
+
+Backend:
+- Node.js
+- Express.js
+- MongoDB (Mongoose)
+- Socket.IO
+
+----------------------------------------------------------------
+INSTALLATION AND SETUP
+----------------------------------------------------------------
+
+Prerequisites:
+- Node.js (v18+)
+- npm
+- MongoDB (local or Atlas)
+
+Step 1: Clone the repository
+----------------------------
+git clone https://github.com/Jithin15P/CYBERGUARD360.git
 cd cyberguard360
-Step 2: Backend Setup (Server)
 
-Navigate to the server directory:
-
-code
-Bash
-download
-content_copy
-expand_less
+Step 2: Backend Setup
+---------------------
 cd server
-
-Install dependencies:
-
-code
-Bash
-download
-content_copy
-expand_less
 npm install
 
-Configure Environment Variables:
+Create a .env file inside "server" directory:
 
-Create a file named .env in the server directory.
-
-Add your MongoDB connection string and desired port:
-
-code
-Env
-download
-content_copy
-expand_less
 PORT=5000
-MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/cyberguard360?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/cyberguard360
 
-Start the Backend Server:
-
-code
-Bash
-download
-content_copy
-expand_less
+Start the backend:
 node server.js
 
-(The terminal should show "MongoDB Connected" and "Server running on port 5000".)
+Expected output:
+"MongoDB Connected"
+"Server running on port 5000"
 
-Step 3: Frontend Setup (Client)
-
-Navigate to the client directory:
-
-code
-Bash
-download
-content_copy
-expand_less
+Step 3: Frontend Setup
+----------------------
 cd ../client
-
-Install dependencies:
-
-code
-Bash
-download
-content_copy
-expand_less
 npm install
-
-Start the Frontend Application:
-
-code
-Bash
-download
-content_copy
-expand_less
 npm start
 
-(The application will open in your browser at http://localhost:3000.)
+Application runs at:
+http://localhost:3000
 
-🚀 Usage Guide
+----------------------------------------------------------------
+USAGE GUIDE
+----------------------------------------------------------------
 
-Once the backend (node server.js) and frontend (npm start) are running, navigate to http://localhost:3000.
+1. Simulator View ("/")
+   - Select an attack type (SQL Injection, XSS, Ransomware, Safe Request).
+   - Enter payload and launch the attack.
+   - Immediate feedback:
+       - Blocked attacks return 403.
+       - Safe or allowed attacks show 200.
+   - XSS tests show reflected payload.
 
-1. Simulator View (/)
+2. Live Monitor ("/monitor")
+   - Real-time activity stream via Socket.IO.
+   - Shows all inbound requests as "attack" or "safe".
+   - Displays counts, ratios, and continuous updates.
 
-This is your interactive testing ground.
+3. Attack Logs ("/logs")
+   - Complete history stored in MongoDB.
+   - Filter logs by:
+       - Attack type
+       - Severity
+       - Detection status
+       - Date
+   - Search by payload or IP.
+   - Click on payload preview to view full data.
 
-Launch an Attack: Select an attack type (e.g., SQL Injection), enter the malicious payload (e.g., ' OR 1=1; --), and click Launch Attack.
+----------------------------------------------------------------
+PROJECT STRUCTURE
+----------------------------------------------------------------
+cyberguard360/
+│
+├── client/                 # React Frontend
+│   ├── src/
+│   │   ├── components/     # AttackSimulator, Monitor, Logs, UI components
+│   │   └── index.css       # Tailwind global styles
+│
+├── server/                 # Node.js Backend
+│   ├── server.js           # Express + Socket.IO setup
+│   ├── config/db.js        # Database connection
+│   ├── models/AttackLog.js # MongoDB Schema (Mongoose)
+│   ├── middleware/
+│   │   └── defenseMiddleware.js  # AI Defense Engine
+│   ├── routes/
+│   │   ├── attackRoutes.js # Attack simulation routes
+│   │   └── logRoutes.js    # Logs and filtering routes
+│   └── .env                # Env variables (not included in repo)
 
-Observe Results: The Attack Report section will instantly display the backend's response:
 
-Defense Engaged (RED 403): The middleware detected and blocked the attack.
+----------------------------------------------------------------
+ROADMAP / FUTURE IMPROVEMENTS
+----------------------------------------------------------------
 
-Request Status (GREEN 200): The request was safe or the defense was successfully bypassed (in a non-critical simulation like Ransomware).
+- Implement advanced detection (semantic payload analysis, brute-force pattern tracking)
+- Add user accounts and authentication
+- Add attack replay visualization
+- Add more attack modules (Directory Traversal, Command Injection, simulated Buffer Overflow)
+- Integrate analytics dashboards with charts
 
-The XSS simulation includes a Reflected Content box to demonstrate the exploit if the attack is allowed.
+----------------------------------------------------------------
+CONTACT
+----------------------------------------------------------------
 
-2. Live Monitor View (/monitor)
+Developer: Jithin Lakshman  
+LinkedIn: https://www.linkedin.com/in/jithin-lakshman-p-a93263289/
 
-This is your real-time security operations center.
-
-Visualization: Every request launched from the Simulator (or any other client) will instantly appear in the Recent Activity stream.
-
-Color Coding:
-
-RED events indicate a detected attack.
-
-GREEN events indicate a safe request.
-
-Stats: The dashboard updates attack counts, safe counts, and the overall attack ratio instantly via Socket.IO.
-
-3. Attack Logs View (/logs)
-
-This is your historical analysis tool.
-
-Filtering: Use the dropdowns (Attack Type, Severity, Detected Status) and the Search bar (for IP or Payload content) to filter past events.
-
-Data Source: All entries are pulled from your MongoDB AttackLog collection.
-
-Replay (Detail): Clicking on the Payload Snippet provides a tooltip with the full payload.
-
-📂 Project Structure
-Path	Purpose
-cyberguard360/	Root Directory
-├── client/	React Frontend Application
-│ ├── src/	Main source code.
-│ ├── src/components/	All reusable and page-level components (AttackSimulator.js, Toast.js, etc.).
-│ ├── src/index.css	Tailwind CSS imports and global styles.
-├── server/	Node.js/Express Backend
-│ ├── .env	Environment Variables (Credentials, Port).
-│ ├── server.js	Main entry point, Express/Socket.IO setup, DB connection.
-│ ├── config/db.js	MongoDB connection logic.
-│ ├── models/AttackLog.js	Mongoose schema for persistent logging.
-│ ├── middleware/defenseMiddleware.js	The AI Defense Engine (Rule-based detection/blocking).
-│ ├── routes/attackRoutes.js	Endpoints for attack simulations (uses defenseMiddleware).
-│ └── routes/logRoutes.js	Endpoints for log retrieval and filtering.
-🤝 Next Steps & Roadmap
-
-Given more time, the following features would enhance CyberGuard 360:
-
-Advanced Defense: Implement advanced detection logic (e.g., frequency analysis for brute-force, semantic analysis for complex XSS payloads).
-
-User Authentication: Add basic user accounts to personalize the log view.
-
-Replay Visualization: Implement a dedicated "Replay" screen that graphically animates the timeline of an attack from request -> detection -> action.
-
-More Attack Types: Add modules for Buffer Overflows (simulated), Directory Traversal, and Command Injection.
-
-Graphical Charts: Integrate a charting library to visualize attack trends (e.g., Top 5 Attacked IPs, Attack Type Distribution Pie Chart).
-
-✍️ Contact
-Name	Role	Email
-[JITHIN LAKSHMAN]	Lead Developer	[https://www.linkedin.com/in/jithin-lakshman-p-a93263289/]
-
-This project was built for educational purposes and to demonstrate full-stack development skills across MERN, WebSockets, and defensive programming concepts.
+Note:
+This project is for educational purposes only and demonstrates modern full-stack development with real-time communication and defensive security engineering.
