@@ -1,0 +1,9 @@
+ /* client/src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add a simple global dark mode background for now */
+body {
+  @apply bg-gray-950 text-gray-50; /* Very dark background, light text */
+}
