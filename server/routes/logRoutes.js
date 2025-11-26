@@ -1,62 +1,54 @@
-// server/routes/logRoutes.js
+ // server/routes/logRoutes.js
 const express = require('express');
 const router = express.Router();
 const AttackLog = require('../models/AttackLog');
 
-// GET /api/logs
-// Fetches all logs, with optional filtering, pagination, and sorting.
+// GET /api/logs - Fetches all logs with filtering and pagination
 router.get('/', async (req, res) => {
     try {
         const {
-            limit = 20, // Default limit per page
-            skip = 0,   // Default skip for pagination
+            limit = 20, 
+            skip = 0,   
             startDate,
             endDate,
             attackType,
             detected,
             severity,
-            search // General search term for payload or IP
+            search 
         } = req.query;
 
-        const query = {}; // Build our MongoDB query object
+        const query = {}; 
 
-        // Date range filtering
         if (startDate || endDate) {
             query.timestamp = {};
             if (startDate) query.timestamp.$gte = new Date(startDate);
             if (endDate) query.timestamp.$lte = new Date(endDate);
         }
 
-        // Filter by attack type
-        if (attackType && attackType !== 'All') { // 'All' can be a frontend option
+        if (attackType && attackType !== 'All') { 
             query.attackType = attackType;
         }
 
-        // Filter by detection status
-        if (detected !== undefined) {
-            query.detected = detected === 'true'; // Convert string 'true'/'false' to boolean
+        if (detected !== undefined && detected !== 'All') {
+            query.detected = detected === 'true'; 
         }
 
-        // Filter by severity
         if (severity && severity !== 'All') {
             query.severity = severity;
         }
 
-        // General search across payload or IP
         if (search) {
             query.$or = [
-                { payload: { $regex: search, $options: 'i' } }, // Case-insensitive search in payload
-                { ipAddress: { $regex: search, $options: 'i' } } // Case-insensitive search in IP
+                { payload: { $regex: search, $options: 'i' } }, 
+                { ipAddress: { $regex: search, $options: 'i' } } 
             ];
         }
 
-        // Fetch logs with filters, pagination, and sort by newest first
         const logs = await AttackLog.find(query)
-                                .sort({ timestamp: -1 }) // Sort by newest first
+                                .sort({ timestamp: -1 }) 
                                 .skip(parseInt(skip))
                                 .limit(parseInt(limit));
 
-        // Get total count for pagination metadata
         const total = await AttackLog.countDocuments(query);
 
         res.json({
@@ -72,8 +64,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET /api/logs/:id
-// Fetches a single log entry by its ID (for detailed view/replay)
+// GET /api/logs/:id - Fetches a single log entry by its ID
 router.get('/:id', async (req, res) => {
     try {
         const log = await AttackLog.findById(req.params.id);

@@ -1,4 +1,4 @@
- // server/server.js (updated with log routes)
+// server/server.js
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
@@ -7,10 +7,12 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');
 const attackRoutes = require('./routes/attackRoutes');
-const logRoutes = require('./routes/logRoutes'); // Import log routes
+const logRoutes = require('./routes/logRoutes');
 
 const app = express();
 connectDB();
+
+let ioInstance; // Variable to hold the Socket.IO instance
 
 const server = http.createServer(app);
 const io = socketio(server, {
@@ -20,11 +22,14 @@ const io = socketio(server, {
     }
 });
 
-module.exports.io = io; // Expose io object for use in other modules
+ioInstance = io; // Assign the instance once it's created
+
+// FIX: Export a function that returns the IO instance
+module.exports.getIo = () => ioInstance; 
 
 
 // --- Middleware ---
-app.use(express.json());
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
     origin: "http://localhost:3000"
@@ -43,8 +48,12 @@ app.get('/api/status', (req, res) => {
     res.json({ message: 'CyberGuard Backend is running!', status: 'OK' });
 });
 
-app.use('/api/attack', attackRoutes); // Attack simulation routes
-app.use('/api/logs', logRoutes);     // Log retrieval routes
+app.use('/api/attack', attackRoutes);
+app.use('/api/logs', logRoutes);     
+
+
+
+
 
 // --- Start Server ---
 const PORT = process.env.PORT || 5000;
