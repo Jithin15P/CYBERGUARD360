@@ -1,40 +1,22 @@
- // client/src/components/LiveTrafficMonitor.js
-import React, { useEffect, useState, useRef } from 'react';
-import io from 'socket.io-client';
-
-const SOCKET_SERVER_URL = 'http://localhost:5000';
+// client/src/components/LiveTrafficMonitor.js
+import React, { useEffect, useRef } from 'react';
+ 
+import { useSocketData } from '../context/SocketContext'; 
 
 const LiveTrafficMonitor = () => {
-  const [traffic, setTraffic] = useState([]);
-  const [attackCount, setAttackCount] = useState(0);
-  const [safeCount, setSafeCount] = useState(0);
-  const socketRef = useRef(null);
+   
+  const { traffic, attackCount, safeCount, totalRequests } = useSocketData();
+  
   const trafficContainerRef = useRef(null);
 
-  useEffect(() => {
-    socketRef.current = io(SOCKET_SERVER_URL);
-
-    socketRef.current.on('connect', () => console.log('Connected to Socket.IO'));
-
-    socketRef.current.on('trafficUpdate', (data) => {
-      setTraffic((prev) => [data, ...prev.slice(0, 29)]);
-
-      if (data.status === 'attack') setAttackCount((prev) => prev + 1);
-      else setSafeCount((prev) => prev + 1);
-    });
-
-    socketRef.current.on('disconnect', () => console.log('Socket Disconnected'));
-
-    return () => socketRef.current && socketRef.current.disconnect();
-  }, []);
-
+   
   useEffect(() => {
     if (trafficContainerRef.current) {
-      trafficContainerRef.current.scrollTop = 0;
+       
+      trafficContainerRef.current.scrollTop = 0; 
     }
-  }, [traffic]);
+  }, [traffic]);  
 
-  const totalRequests = attackCount + safeCount;
   const attackPercentage = totalRequests ? (attackCount / totalRequests) * 100 : 0;
   const safePercentage = 100 - attackPercentage;
 
@@ -109,7 +91,7 @@ const LiveTrafficMonitor = () => {
         ) : (
           traffic.map((event) => (
             <div
-              key={event.id}
+              key={event._id}  
               className={`p-4 rounded-xl shadow-lg border-l-4 transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(0,255,255,0.25)]
                 ${event.status === 'attack'
                   ? 'bg-red-900/20 border-red-500'

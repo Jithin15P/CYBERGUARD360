@@ -1,7 +1,7 @@
- // client/src/components/AttackSimulator.js
+// client/src/components/AttackSimulator.js
 import React, { useState } from "react";
 import axios from "axios";
-
+import { Search } from "lucide-react";  
 const API_BASE_URL = "http://localhost:5000/api/attack";
 
 const AttackSimulator = ({ showToast }) => {
@@ -49,7 +49,7 @@ const AttackSimulator = ({ showToast }) => {
 
       showToast(
         "Attack Launched!",
-        res.data.message,
+        res.data.message || "Request completed successfully.",
         res.data.detectedByMiddleware ? "warning" : "success"
       );
     } catch (error) {
@@ -148,7 +148,7 @@ const AttackSimulator = ({ showToast }) => {
       <h2 className="text-3xl font-bold text-cyan-400 mb-6"> Attack Simulator</h2>
 
       <div className="space-y-8">
-        {/* Attack Type Selector */}
+        
         <div>
           <label className="text-lg font-semibold text-gray-300 mb-2 block">
             Choose Attack Type
@@ -165,13 +165,13 @@ const AttackSimulator = ({ showToast }) => {
           </select>
         </div>
 
-        {/* Attack Payload */}
+       
         <div className="card-section">
           <h3 className="section-title"> Attack Payload</h3>
           {renderForm()}
         </div>
 
-        {/* Launch Button */}
+         
         <button
           onClick={handleAttack}
           disabled={isLoading}
@@ -184,7 +184,7 @@ const AttackSimulator = ({ showToast }) => {
           {isLoading ? "Launching..." : "Launch Attack"}
         </button>
 
-        {/* Attack Response Box */}
+       
         {attackResponse && (
           <div
             className={`p-6 rounded-xl border shadow-lg mt-4 ${
@@ -201,15 +201,18 @@ const AttackSimulator = ({ showToast }) => {
                   : "text-green-400"
               }`}
             >
-              {attackResponse.detectedByMiddleware
-                ? " Attack Detected"
+              {attackResponse.detectedByMiddleware || attackResponse.compromised
+                ? " Attack Report"
                 : " Request Successful"}
             </h3>
 
             <div className="space-y-3">
               <div>
                 <p className="label">Message:</p>
-                <p className="value">{attackResponse.message}</p>
+                 
+                <p className="value">
+                  {attackResponse.message || "No message returned by endpoint."}
+                </p>
               </div>
 
               {attackResponse.attackType && (
@@ -251,7 +254,7 @@ const AttackSimulator = ({ showToast }) => {
         )}
       </div>
 
-      {/* --- Reusable Tailwind Classes --- */}
+      
       <style>{`
         .input-field {
           width: 100%;
