@@ -117,28 +117,6 @@ USAGE GUIDE
    - Click on payload preview to view full data.
 
 ----------------------------------------------------------------
-PROJECT STRUCTURE
-----------------------------------------------------------------
-cyberguard360/
-│
-├── client/                 # React Frontend
-│   ├── src/
-│   │   ├── components/     # AttackSimulator, Monitor, Logs, UI components
-│   │   └── index.css       # Tailwind global styles
-│
-├── server/                 # Node.js Backend
-│   ├── server.js           # Express + Socket.IO setup
-│   ├── config/db.js        # Database connection
-│   ├── models/AttackLog.js # MongoDB Schema (Mongoose)
-│   ├── middleware/
-│   │   └── defenseMiddleware.js  # AI Defense Engine
-│   ├── routes/
-│   │   ├── attackRoutes.js # Attack simulation routes
-│   │   └── logRoutes.js    # Logs and filtering routes
-│   └── .env                # Env variables (not included in repo)
-
-
-----------------------------------------------------------------
 ROADMAP / FUTURE IMPROVEMENTS
 ----------------------------------------------------------------
 
